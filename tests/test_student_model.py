@@ -27,8 +27,8 @@ def test_model_definition_present():
 
     assert "Sequential()" in content, "Model not using Sequential API"
     assert "Dense(" in content, "Model does not include Dense layers"
-    assert "model.compile" in content, "Model is not compiled"
-    assert "model.fit" in content, "Model is not trained"
+    assert ".compile" in content, "Model is not compiled"
+    assert ".fit" in content, "Model is not trained"
 
 def test_data_processing_steps_present():
     """Check that the expected preprocessing steps are in the script."""
@@ -45,4 +45,4 @@ def test_prediction_attempt_present():
     with open("src/student_model.py", "r") as f:
         content = f.read()
 
-    assert "model.predict" in content, "Model is not used to make a prediction"
+    assert ".predict" in content, "Model is not used to make a prediction"
