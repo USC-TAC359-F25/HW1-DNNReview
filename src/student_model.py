@@ -56,6 +56,3 @@ plt.ylabel('Mean Squared Error')
 plt.legend(loc='upper right')
 plt.show()
 
-print("R squared score is ", r2_score(y, model.predict(X)))
-
-
