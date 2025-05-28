@@ -1,62 +1,64 @@
+import subprocess
+
 def run_custom_tests():
-    import subprocess
-
-    # Define tests and their weights (example weights, adjust as needed)
-    tests = [
-        ("Test A", 20),
-        ("Test B", 30),
-        ("Test C", 25),
-        ("Test D", 25),
-    ]
-    total_points = sum(weight for _, weight in tests)
-
     print("\n📋 Running Student Model Evaluation...\n")
+
+    # Run pytest on your tests folder quietly
     result = subprocess.run(
         ["pytest", "--tb=short", "--disable-warnings", "-q", "tests/"],
-        capture_output=True, text=True
+        capture_output=True,
+        text=True,
     )
 
-    output = result.stdout
-    # Basic heuristic for counting passed and failed tests
-    passed = output.count("✓") + output.count("PASSED")  # cover different pytest output styles
-    failed = output.count("F") + output.count("FAILED")
+    output = result.stdout + result.stderr  # capture both stdout and stderr
+    passed = output.count("✓")
+    failed = output.count("F")
     total = passed + failed
 
-    # Calculate score (simple percent passed)
     score = max(int((passed / max(total, 1)) * 100), 0)
 
-    # Emoji for score
-    if score == 100:
+    # Choose emoji based on performance
+    if score == 5:
         emoji = "🎉"
-    elif score >= 80:
+    elif score >= 4:
         emoji = "👍"
-    elif score >= 60:
+    elif score >= 3:
         emoji = "😐"
     else:
         emoji = "💥"
 
-    # Print the formatted grade report
-    print("\nGrade Report")
-    print(f"Result\tTest\tPoints\tEarned\tDetails")
-    print(f"Graded Student Model tests")
+    print("\n🎓 Grade Report")
+    print("Result\tTest\tPoints\tEarned\tDetails")
+    print("Graded Student Model Tests")
 
-    # Distribute points proportionally (simplified)
-    # Here we just show all tests passed for demo, you can enhance by parsing actual test names
-    for test_name, points in tests:
-        status = "✅ PASS" if passed > 0 else "❌ FAIL"
-        earned = points if passed > 0 else 0
-        print(f"{status}\t{test_name}\t{points}\t{earned}\t")
+    # Map tests to points roughly (adjust as you want)
+    test_points = {
+        "test_file_exists": 1,
+        "test_required_imports": 1,
+        "test_model_definition_present": 1,
+        "test_data_processing_steps_present": 1,
+        "test_prediction_attempt_present": 1,
+    }
 
-    print(f"Subtotal\t{total_points}\t{score}\t")
-    print(f"Test Cases Grade")
-    print(f"Subtotal\t0\t0\t")
-    print(f"TOTAL\t{total_points}\t{score}\t")
-    print(f"\n🔥 All test cases passed!! 😀" if score == 100 else "\n⚠️ Some tests failed.")
-    print(f"You received {score} out of {total_points} points.")
-    print("\nKeep in mind you still need to check for warnings, and there may be additional assignment-specific points.\n")
+    # Calculate points earned per test (basic approximation)
+    points_earned = 0
+    for test_name, points in test_points.items():
+        if test_name in output:
+            if f"✓ {test_name}" in output:
+                points_earned += points
+                status = "✅ PASS"
+            elif f"F {test_name}" in output:
+                status = "❌ FAIL"
+            else:
+                status = "❓ UNKNOWN"
+            print(f"{status}\t{test_name}\t{points}\t{points if status=='✅ PASS' else 0}\t")
 
-    print("🛠️  Details:\n")
+    print(f"Subtotal\t{sum(test_points.values())}\t{points_earned}")
+    print(f"TOTAL\t{sum(test_points.values())}\t{points_earned}")
+    print(f"\n📝 Final Score: {score}/100 {emoji}")
+    print("\n🛠️  Details:\n")
     print(output)
+
 
 if __name__ == "__main__":
     run_custom_tests()
