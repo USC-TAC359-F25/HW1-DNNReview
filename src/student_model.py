@@ -58,6 +58,4 @@ plt.show()
 
 print("R squared score is ", r2_score(y, model.predict(X)))
 
-# Predict fare for 2 passengers 4 mile ride at 2 pm on a Sunday
-print("The fare for 2 passengers to ride 3.2  "
-      "miles at 3:20 pm on a Friday is $", model.predict([[2, 4, 15.33, 3.2]]))
+
