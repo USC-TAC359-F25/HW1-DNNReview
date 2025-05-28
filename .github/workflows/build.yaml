@@ -23,9 +23,10 @@ jobs:
       - name: Install pytest
         run: pip install pytest
         
-      - name: Run all tests
-        run: pytest tests/test_student_model.py
-
-      - name: Run custom code test summary
-        run: python tests/test_student_model.py
+      - name: Run tests
+        run: pytest tests/ --disable-warnings
+      
+      - name: Run custom summary
+        if: always()  
+        run: python tests/run_tests_summary.py
 
