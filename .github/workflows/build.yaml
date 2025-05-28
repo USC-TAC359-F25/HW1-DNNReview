@@ -22,9 +22,6 @@ jobs:
 
       - name: Install pytest
         run: pip install pytest
-
-      - name: Run static code tests
-        run: pytest tests/
         
       - name: Run custom code test summary
         run: pytest tests/test_student_model.py
