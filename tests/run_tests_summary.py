@@ -18,11 +18,11 @@ def run_custom_tests():
     score = max(int((passed / max(total, 1)) * 100), 0)
 
     # Choose emoji based on performance
-    if score == 5:
+    if score == 100:
         emoji = "🎉"
-    elif score >= 4:
+    elif score >= 80:
         emoji = "👍"
-    elif score >= 3:
+    elif score >= 60:
         emoji = "😐"
     else:
         emoji = "💥"
@@ -33,11 +33,11 @@ def run_custom_tests():
 
     # Map tests to points roughly (adjust as you want)
     test_points = {
-        "test_file_exists": 1,
-        "test_required_imports": 1,
-        "test_model_definition_present": 1,
-        "test_data_processing_steps_present": 1,
-        "test_prediction_attempt_present": 1,
+        "test_file_exists": 20,
+        "test_required_imports": 20,
+        "test_model_definition_present": 20,
+        "test_data_processing_steps_present": 20,
+        "test_prediction_attempt_present": 20,
     }
 
     # Calculate points earned per test (basic approximation)
