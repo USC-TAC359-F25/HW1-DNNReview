@@ -1,13 +1,12 @@
-# TAC 359 HW1 - Fall 2025 #
+# TAC 359 — Homework 1 (Fall 2025)
 
-## Student information... ##
-Name: Tommy Trojan
+## Student Information
+- **Name:** Tommy Trojan  
+- **Email:** ttrojan@usc.edu  
 
-Email: ttrojan@usc.edu
+## System Preferences
+- **Platform:** [ PC / MAC ]  
+- **IDE:** [ Colab / PyCharm / VSCode ]  
 
-Please select from the following based on your system preferences:
-
-Platform: [PC/MAC]
-IDE:[Colab/PyCharm/VSCode]
-
-### Notes ###
+## 📝 Notes
+(As you complete the assignment, describe your coding process, any issues you ran into, how you overcame them, and what you learned from the assignment.)
