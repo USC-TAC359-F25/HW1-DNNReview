@@ -23,6 +23,9 @@ jobs:
       - name: Install pytest
         run: pip install pytest
         
-      - name: Run custom code test summary
+      - name: Run all tests
         run: pytest tests/test_student_model.py
+
+      - name: Run custom code test summary
+        run: python tests/test_student_model.py
 
