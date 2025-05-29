@@ -10,37 +10,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.metrics import mean_squared_error, r2_score
 
-# Load and prepare the data
-def load_and_preprocess_data():
-    # Sample data creation (replace with actual data loading)
-    data = {
-        'pickup_datetime': pd.date_range('2023-01-01', periods=1000, freq='H'),
-        'pickup_longitude': np.random.uniform(-74.1, -73.9, 1000),
-        'pickup_latitude': np.random.uniform(40.6, 40.8, 1000),
-        'dropoff_longitude': np.random.uniform(-74.1, -73.9, 1000),
-        'dropoff_latitude': np.random.uniform(40.6, 40.8, 1000),
-        'passenger_count': np.random.randint(1, 7, 1000),
-        'fare_amount': np.random.uniform(5, 50, 1000)
-    }
-    
-    df = pd.DataFrame(data)
-    
-    # Feature engineering
-    df['pickup_datetime'] = pd.to_datetime(df['pickup_datetime'])
-    df['hour'] = df['pickup_datetime'].dt.hour
-    df['day_of_week'] = df['pickup_datetime'].dt.dayofweek
-    
-    # Calculate distance using Haversine formula (simplified)
-    df['distance'] = np.sqrt(
-        (df['dropoff_longitude'] - df['pickup_longitude'])**2 + 
-        (df['dropoff_latitude'] - df['pickup_latitude'])**2
-    ) * 111  # Approximate conversion to km
-    
-    return df
-
-# Load data
-df = load_and_preprocess_data()
-
 # Data preprocessing
 # Drop unnecessary columns
 df_processed = df.drop(['pickup_datetime', 'pickup_longitude', 'pickup_latitude', 
