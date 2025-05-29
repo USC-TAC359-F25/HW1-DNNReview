@@ -1,1 +1,126 @@
 # TODO: Read Homework 1.docx for instrucitons
+
+# Required imports
+import pandas as pd
+import tensorflow as tf
+from tensorflow import keras
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.metrics import mean_squared_error, r2_score
+
+# Load and prepare the data
+def load_and_preprocess_data():
+    # Sample data creation (replace with actual data loading)
+    df = pd.read_csv("taxifares.csv", parse_dates=["pickup_datetime"])
+    print(df.head())
+
+
+    data = {
+        'pickup_datetime': pd.date_range('2023-01-01', periods=1000, freq='H'),
+        'pickup_longitude': np.random.uniform(-74.1, -73.9, 1000),
+        'pickup_latitude': np.random.uniform(40.6, 40.8, 1000),
+        'dropoff_longitude': np.random.uniform(-74.1, -73.9, 1000),
+        'dropoff_latitude': np.random.uniform(40.6, 40.8, 1000),
+        'passenger_count': np.random.randint(1, 7, 1000),
+        'fare_amount': np.random.uniform(5, 50, 1000)
+    }
+    
+    df = pd.DataFrame(data)
+    
+    # Feature engineering
+    df['pickup_datetime'] = pd.to_datetime(df['pickup_datetime'])
+    df['hour'] = df['pickup_datetime'].dt.hour
+    df['day_of_week'] = df['pickup_datetime'].dt.dayofweek
+    
+    # Calculate distance using Haversine formula (simplified)
+    df['distance'] = np.sqrt(
+        (df['dropoff_longitude'] - df['pickup_longitude'])**2 + 
+        (df['dropoff_latitude'] - df['pickup_latitude'])**2
+    ) * 111  # Approximate conversion to km
+    
+    return df
+
+# Load data
+df = load_and_preprocess_data()
+
+# Data preprocessing
+# Drop unnecessary columns
+df_processed = df.drop(['pickup_datetime', 'pickup_longitude', 'pickup_latitude', 
+                       'dropoff_longitude', 'dropoff_latitude'], axis=1)
+
+# Prepare features and target
+X = df_processed.drop('fare_amount', axis=1)
+y = df_processed['fare_amount']
+
+# Split data
+from sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Normalize features
+from sklearn.preprocessing import StandardScaler
+scaler = StandardScaler()
+X_train_scaled = scaler.fit_transform(X_train)
+X_test_scaled = scaler.transform(X_test)
+
+# Build the model
+model = Sequential()
+model.add(Dense(128, activation='relu', input_shape=(X_train_scaled.shape[1],)))
+model.add(Dense(64, activation='relu'))
+model.add(Dense(32, activation='relu'))
+model.add(Dense(1))  # Output layer for regression
+
+# Compile the model
+model.compile(
+    optimizer='adam',
+    loss='mean_squared_error',
+    metrics=['mae']
+)
+
+# Train the model
+history = model.fit(
+    X_train_scaled, y_train,
+    epochs=50,
+    batch_size=32,
+    validation_split=0.2,
+    verbose=1
+)
+
+# Make predictions
+predictions = model.predict(X_test_scaled)
+
+# Evaluate the model
+mse = mean_squared_error(y_test, predictions)
+r2 = r2_score(y_test, predictions)
+
+print(f"Mean Squared Error: {mse}")
+print(f"R² Score: {r2}")
+
+# Plot training history
+plt.figure(figsize=(12, 4))
+
+plt.subplot(1, 2, 1)
+plt.plot(history.history['loss'], label='Training Loss')
+plt.plot(history.history['val_loss'], label='Validation Loss')
+plt.title('Model Loss')
+plt.xlabel('Epoch')
+plt.ylabel('Loss')
+plt.legend()
+
+plt.subplot(1, 2, 2)
+plt.plot(history.history['mae'], label='Training MAE')
+plt.plot(history.history['val_mae'], label='Validation MAE')
+plt.title('Model MAE')
+plt.xlabel('Epoch')
+plt.ylabel('MAE')
+plt.legend()
+
+plt.tight_layout()
+plt.show()
+
+# Example prediction on new data
+sample_data = np.array([[2, 3, 5.5]])  # [passenger_count, hour, day_of_week, distance]
+sample_prediction = model.predict(scaler.transform(sample_data))
+print(f"Predicted fare for sample trip: ${sample_prediction[0][0]:.2f}")
+
