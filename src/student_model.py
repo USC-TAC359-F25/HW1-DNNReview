@@ -13,10 +13,6 @@ from sklearn.metrics import mean_squared_error, r2_score
 # Load and prepare the data
 def load_and_preprocess_data():
     # Sample data creation (replace with actual data loading)
-    df = pd.read_csv("taxifares.csv", parse_dates=["pickup_datetime"])
-    print(df.head())
-
-
     data = {
         'pickup_datetime': pd.date_range('2023-01-01', periods=1000, freq='H'),
         'pickup_longitude': np.random.uniform(-74.1, -73.9, 1000),
