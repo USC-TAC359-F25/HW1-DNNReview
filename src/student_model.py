@@ -1,14 +1,7 @@
 # TODO: Read Homework 1.docx for instrucitons
 
 # Required imports
-import pandas as pd
-import tensorflow as tf
-from tensorflow import keras
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense
-import numpy as np
-import matplotlib.pyplot as plt
-from sklearn.metrics import mean_squared_error, r2_score
+
 
 # Data preprocessing
 # Drop unnecessary columns
